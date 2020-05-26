@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 
 	rlog "github.com/digitalocean/concourse-resource-library/log"
 	rshared "github.com/digitalocean/concourse-resource-library/resource"
+	resource "github.com/digitalocean/github-resource"
 )
 
 func main() {
@@ -13,8 +13,19 @@ func main() {
 	defer rlog.Close()
 
 	var request rshared.CheckRequest
-	if err := json.Unmarshal(input, &request); err != nil {
-		log.Fatalf("failed to unmarshal request: %s", err)
+	err := request.Read(input)
+	if err != nil {
+		log.Fatalf("failed to read request input: %s", err)
+	}
+
+	response, err := resource.Check(request)
+	if err != nil {
+		log.Fatalf("failed to perform check: %s", err)
+	}
+
+	err = response.Write()
+	if err != nil {
+		log.Fatalf("failed to write response to stdout: %s", err)
 	}
 
 	log.Println("check complete")
