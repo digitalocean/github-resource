@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"time"
+
+	m "github.com/digitalocean/concourse-resource-library/metadata"
 )
 
 // Source represents the configuration for the resource
@@ -82,6 +84,12 @@ type GetRequest struct {
 	Source  Source        `json:"source"`
 	Params  GetParameters `json:"params"`
 	Version Version       `json:"version"`
+}
+
+// GetResponse ...
+type GetResponse struct {
+	Version  Version    `json:"version"`
+	Metadata m.Metadata `json:"metadata,omitempty"`
 }
 
 // PutParameters for the resource
